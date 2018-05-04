@@ -58,6 +58,7 @@ import org.osate.verify.verify.VerificationPlan
 import org.osate.verify.verify.VerifyPackage
 
 import static extension org.osate.verify.util.VerifyUtilExtension.*
+import org.osate.verify.verify.MethodKind
 
 /**
  * Custom validation rules. 
@@ -147,15 +148,15 @@ class VerifyValidator extends VerifyTypeSystemValidator {
 				"Requirement is for component while verification method is not for component, element, or root",
 				va, VerifyPackage.Literals.VERIFICATION_ACTIVITY__METHOD,MISMATCHED_TARGET)
 				}
-			} else if (target instanceof Feature && !(vm.targetType === TargetType.FEATURE|| vm.targetType !== TargetType.ELEMENT)){
+			} else if (target instanceof Feature && !(vm.targetType === TargetType.FEATURE|| vm.targetType === TargetType.ELEMENT || vm.methodKind instanceof PluginMethod)){
 				error(
 				"Requirement is for Feature while verification method is not for Feature",
 				va, VerifyPackage.Literals.VERIFICATION_ACTIVITY__METHOD,MISMATCHED_TARGET)
-			} else if (target instanceof EndToEndFlow && (vm.targetType === TargetType.FLOW|| vm.targetType !== TargetType.ELEMENT)){
+			} else if (target instanceof EndToEndFlow && !(vm.targetType === TargetType.FLOW|| vm.targetType === TargetType.ELEMENT|| vm.methodKind instanceof PluginMethod)){
 				error(
 				"Requirement is for Flow while verification method is not for Flow",
 				va, VerifyPackage.Literals.VERIFICATION_ACTIVITY__METHOD,MISMATCHED_TARGET)
-			} else if ((req.connections || target instanceof Connection )&& !(vm.targetType === TargetType.CONNECTION|| vm.targetType !== TargetType.ELEMENT)){
+			} else if ((req.connections || target instanceof Connection )&& !(vm.targetType === TargetType.CONNECTION|| vm.targetType === TargetType.ELEMENT|| vm.methodKind instanceof PluginMethod)){
 				error(
 				"Requirement is for Flow while verification method is not for Flow",
 				va, VerifyPackage.Literals.VERIFICATION_ACTIVITY__METHOD,MISMATCHED_TARGET)
